@@ -19,7 +19,6 @@ func init_data(cfg):
 	self.blood = cfg_data.blood
 	self.ratio = cfg_data.scale
 	set_process(true)
-	pass
 
 func set_blood(value):
 	blood = value
