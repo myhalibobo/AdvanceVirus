@@ -2,7 +2,8 @@ extends Node2D
 
 var cfg_data
 var velocity
-var velocity_scale = Vector2(1,1)
+var velocity_scale = 1
+var target_velocity_scale = 1
 var blood setget set_blood
 var ratio setget set_ratio
 var radius = 110
@@ -29,12 +30,12 @@ func set_blood(value):
 	Label_Blood.text = str(blood)
 	if blood == 0:
 		#死亡
-		VirusMgr.split_virus(cfg_data,position)
-		VirusMgr.remove_virus_by_object(self)
+		VirusMgr.split_virus(cfg_data,position)#分裂
+		VirusMgr.remove_virus_by_object(self)#remove
 
 #速度缩放
 func set_velocity_scale(_scale):
-	velocity_scale = _scale
+	target_velocity_scale = _scale
 	
 #设置病毒缩放
 func set_ratio(value):
@@ -54,6 +55,7 @@ func _update_position(delta):
 	if position.y - radius * scale.x > Utils.win_size.y:
 		position.y = ConfigMgr.virus_barth_y
 	#更新病毒位置
+	velocity_scale = lerp(velocity_scale,target_velocity_scale,0.05)
 	var move = velocity * delta * velocity_scale
 	position += move
 	
