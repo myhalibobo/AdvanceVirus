@@ -30,10 +30,12 @@ func set_blood(value):
 	Label_Blood.text = str(blood)
 	if blood == 0:
 		#死亡
+		is_dead = true
 		VirusMgr.split_virus(cfg_data,position)#分裂
 		VirusMgr.remove_virus_by_object(self)#remove
 
 func take_damage(value):
+	if is_dead: return
 	self.blood -= value
 
 #速度缩放

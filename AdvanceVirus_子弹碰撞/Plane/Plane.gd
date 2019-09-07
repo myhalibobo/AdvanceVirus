@@ -10,7 +10,8 @@ func _ready():
 	bullet_box.connect("bullet_collision",self,"_on_bullet_collision")
 	bullet_box.follower = self
 	bullet_box.pierce_rate = 0.1
-	
+	bullet_box.pierce_num = 2
+	bullet_box.damage = 10
 	start_shoot()
 
 func set_velocity(velocity):
@@ -28,4 +29,6 @@ func stop_shoot():
 func _on_bullet_collision(collider, is_critical, is_pierce):
 	var node = collider.get_parent().get_parent()
 	if node.has_method("take_damage"):
-		node.take_damage(10)
+		if is_critical:
+			bullet_box.damage *=3
+		node.take_damage(bullet_box.damage)

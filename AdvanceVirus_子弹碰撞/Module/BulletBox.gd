@@ -61,6 +61,7 @@ func add_bullet(pos,speed,shoot_angle=Vector2(0,-1),bullet_angle=0):
 	b.transform.origin = pos
 	b.velocity = shoot_angle * speed
 	b.pierce_num = pierce_num
+	b.pierce_rate = pierce_rate
 	b.critical_rate = critical_rate
 	b.damage = damage
 	bullet_list.append(b)
@@ -84,7 +85,7 @@ func _init_query_para():
 	query_shape = CircleShape2D.new()
 	query_shape.radius = bullet_texture.get_size().x
 	query_para = Physics2DShapeQueryParameters.new()
-	query_para.collision_layer = 1
+	query_para.collision_layer = collision_layer
 	query_para.collide_with_areas = is_collide_with_areas
 	query_para.collide_with_bodies = is_collide_with_bodies
 	query_para.set_shape(query_shape)
@@ -117,17 +118,20 @@ func _process(delta):
 			if result:
 				for info in result:
 					var collider = info.collider
-					if not b.exclude_list.has(collider):
+					if not b.exclude_list.has(collider) and not b.is_free:
 						#穿刺处理
 						var is_pierce = chack_rate(b.pierce_rate)
-						if is_pierce :
+						if not is_pierce or b.pierce_num == 0:
+							b.is_free = true
+						if is_pierce:
 							if b.pierce_num > 0:
 								b.pierce_num -= 1
 								b.exclude_list.append(collider)
+						#暴击处理
 						var is_critical = chack_rate(b.critical_rate)
 						emit_signal("bullet_collision",collider,is_critical,is_pierce)
-						if not is_pierce or b.pierce_num == 0:
-							b.is_free = true
+						if b.is_free:
+							break
 		#子弹移动
 		b.transform.origin += b.velocity * delta
 		
