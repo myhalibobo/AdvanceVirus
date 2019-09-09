@@ -38,6 +38,7 @@ func set_blood(value):
 
 func take_damage(value):
 	if is_dead: return
+	hurtEffect()
 	self.blood -= value
 
 #速度缩放
@@ -99,3 +100,12 @@ func update_node_color():
 func _process(delta):
 	_update_position(delta)
 	_update_color()
+
+func hurtEffect():
+	if $TweenNode.is_active():
+		return
+	var time = 0.018
+	var origin_scale = Vector2(cfg_data.scale,cfg_data.scale)
+	$TweenNode.interpolate_property($BodyNode,"scale", $BodyNode.scale, origin_scale*0.87, time, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
+	$TweenNode.interpolate_property($BodyNode,"scale", $BodyNode.scale, origin_scale, time, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR,0.035)
+	$TweenNode.start()
