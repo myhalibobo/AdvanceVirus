@@ -1,0 +1,99 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Virus/TreatVirue.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Virus/treat.png" type="Texture" id=2]
+[ext_resource path="res://assets/Virus/bottom.png" type="Texture" id=3]
+[ext_resource path="res://assets/Virus/aureole.png" type="Texture" id=4]
+[ext_resource path="res://assets/font/GameFont.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 47
+font_data = ExtResource( 5 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 99.1816
+
+[sub_resource type="Animation" id=3]
+resource_name = "Anim"
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("BodyNode/tentacle1:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 360.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("BodyNode/tentacle2:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 45.0, -315.0 ]
+}
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 557.065
+
+[node name="TreatVirue" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BodyNode" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="tentacle1" type="Sprite" parent="BodyNode"]
+position = Vector2( -0.681428, -1.07556 )
+rotation = 0.832346
+scale = Vector2( 1.62142, 1.62142 )
+texture = ExtResource( 2 )
+offset = Vector2( 2.82371, -7.43984 )
+
+[node name="tentacle2" type="Sprite" parent="BodyNode"]
+visible = false
+rotation = -0.0469478
+texture = ExtResource( 3 )
+
+[node name="body" type="Sprite" parent="BodyNode"]
+texture = ExtResource( 4 )
+
+[node name="Label_Blood" type="Label" parent="BodyNode"]
+margin_left = -91.0427
+margin_top = -33.7826
+margin_right = 94.9573
+margin_bottom = 32.2174
+custom_fonts/font = SubResource( 1 )
+text = "1000"
+align = 1
+valign = 1
+
+[node name="Area2D" type="Area2D" parent="BodyNode"]
+editor/display_folded = true
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyNode/Area2D"]
+shape = SubResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Anim"
+anims/Anim = SubResource( 3 )
+
+[node name="TweenNode" type="Tween" parent="."]
+
+[node name="VirusCheck" type="Area2D" parent="."]
+editor/display_folded = true
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VirusCheck"]
+shape = SubResource( 4 )
+
+[node name="TimerTreat" type="Timer" parent="."]
